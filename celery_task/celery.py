@@ -11,6 +11,27 @@ backend = 'redis://127.0.0.1:6379/2'
 app = Celery(__name__, broker=broker, backend=backend,
              include=['celery_task.task1', 'celery_task.task2'])
 
+# 2 启动worker
+# 启动命令是：celery -A celery_t worker -l info
+# Windows会报错
+'''
+Traceback (most recent call last):
+  File "d:\virtualenvs\luffy\lib\site-packages\billiard\pool.py", line 362, in workloop
+    result = (True, prepare_result(fun(*args, **kwargs)))
+  File "d:\virtualenvs\luffy\lib\site-packages\celery\app\trace.py", line 635, in fast_trace_task
+    tasks, accept, hostname = _loc
+ValueError: not enough values to unpack (expected 3, got 0)
+worker: Hitting Ctrl+C again will terminate all running tasks!
+'''
+# 解决：
+#
+# pip install eventlet
+# celery -A celery_t worker -l info -P eventlet
+
+# 定时任务
+# celery -A celery_task beat -l info
+
+
 # ======================================
 # 执行定时任务
 # 时区
